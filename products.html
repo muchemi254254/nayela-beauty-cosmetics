@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Catalog — Nayela Beauty Cosmetics</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,12 +19,12 @@
           <span>nayela beauty</span>
         </a>
         <nav class="nav-links">
-          <a href="products.html" class="active">catalog</a>
-          <a href="products.html">brands</a>
-          <a href="products.html">for her</a>
-          <a href="products.html">for him</a>
-          <a href="products.html">special offers</a>
-          <a href="index.html">about us</a>
+          <a href="products.html" data-filter="all">catalog</a>
+          <a href="products.html?filter=brands" data-filter="brands">brands</a>
+          <a href="products.html?filter=her" data-filter="her">for her</a>
+          <a href="products.html?filter=him" data-filter="him">for him</a>
+          <a href="products.html?filter=offers" data-filter="offers">special offers</a>
+          <a href="about.html">about us</a>
         </nav>
         <div class="nav-icons">
           <a href="products.html" class="icon-btn cart-btn">
@@ -36,9 +37,18 @@
 
     <main class="catalog-section">
       <div class="catalog-header">
-        <h1>Our Products</h1>
-        <p>Premium cosmetics & body care — pay with M-Pesa or WhatsApp</p>
+        <h1 id="page-title">Our Products</h1>
+        <p id="page-subtitle">Premium cosmetics & body care — pay with M-Pesa or WhatsApp</p>
       </div>
+
+      <div class="filter-bar">
+        <a href="products.html" class="filter-pill" data-filter="all">All</a>
+        <a href="products.html?filter=brands" class="filter-pill" data-filter="brands">Brands</a>
+        <a href="products.html?filter=her" class="filter-pill" data-filter="her">For Her</a>
+        <a href="products.html?filter=him" class="filter-pill" data-filter="him">For Him</a>
+        <a href="products.html?filter=offers" class="filter-pill" data-filter="offers">Special Offers</a>
+      </div>
+
       <div id="products-grid" class="products-grid">
         <div class="loading">Loading products...</div>
       </div>
@@ -50,25 +60,51 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1dHdyZmtsb3ZudWJocW1lYW9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1ODUyOTYsImV4cCI6MjEwNjE2MTI5Nn0.neWHWJTYtp42YWRX_QPb6LZErmYzlZwheYCgz8BeKgM';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    const params = new URLSearchParams(window.location.search);
+    const filter = params.get('filter') || 'all';
+
+    const titles = {
+      all: ['Our Products', 'Premium cosmetics & body care — pay with M-Pesa or WhatsApp'],
+      brands: ['Brands', 'Shop by your favourite brands'],
+      her: ['For Her', 'Beauty essentials curated for her'],
+      him: ['For Him', 'Grooming & care products for him'],
+      offers: ['Special Offers', 'Great deals and discounts']
+    };
+    document.getElementById('page-title').textContent = (titles[filter] || titles.all)[0];
+    document.getElementById('page-subtitle').textContent = (titles[filter] || titles.all)[1];
+
+    document.querySelectorAll('[data-filter]').forEach(el => {
+      if (el.dataset.filter === filter) el.classList.add('active');
+    });
+
+    function formatKES(n) {
+      return 'KSh ' + Number(n).toLocaleString('en-KE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
     async function loadProducts() {
       const grid = document.getElementById('products-grid');
       try {
-        const { data, error } = await supabaseClient
-          .from('products')
-          .select('*')
-          .order('created_at', { ascending: true });
-
+        const { data, error } = await supabaseClient.from('products').select('*').order('created_at', { ascending: false });
         if (error) throw error;
         if (!data || data.length === 0) {
-          grid.innerHTML = '<p class="empty">No products found.</p>';
+          grid.innerHTML = '<p class="empty">No products found yet.</p>';
           return;
         }
 
-        grid.innerHTML = data.map(p => {
+        let filtered = data;
+        if (filter === 'offers') filtered = data.filter(p => p.discount_percent > 0);
+        else if (filter === 'her') filtered = data.filter(p => ['face','lips','body','her','makeup'].includes((p.category||'').toLowerCase()));
+        else if (filter === 'him') filtered = data.filter(p => ['him','men','body'].includes((p.category||'').toLowerCase()));
+
+        if (filtered.length === 0) {
+          grid.innerHTML = '<p class="empty">No products in this category yet.</p>';
+          return;
+        }
+
+        grid.innerHTML = filtered.map(p => {
           const hasDiscount = p.discount_percent > 0;
           const stars = '★'.repeat(Math.round(p.rating || 5));
           const checkoutUrl = `checkout.html?id=${encodeURIComponent(p.id)}&name=${encodeURIComponent(p.name)}&price=${p.price}&original=${p.original_price || ''}&image=${encodeURIComponent(p.image_url || '')}&desc=${encodeURIComponent(p.description || 'Premium quality cosmetics carefully selected for you.')}`;
-
           return `
             <article class="product-item">
               ${hasDiscount ? `<span class="discount-badge">${p.discount_percent}% OFF</span>` : ''}
@@ -79,17 +115,16 @@
                 <div class="stars">${stars}</div>
                 <h3 class="product-name">${p.name}</h3>
                 <div class="price-row">
-                  <span class="price">KES ${Number(p.price).toFixed(2)}</span>
-                  ${hasDiscount && p.original_price ? `<span class="original-price">KES ${Number(p.original_price).toFixed(2)}</span>` : ''}
+                  <span class="price">${formatKES(p.price)}</span>
+                  ${hasDiscount && p.original_price ? `<span class="original-price">${formatKES(p.original_price)}</span>` : ''}
                 </div>
                 <a href="${checkoutUrl}" class="buy-btn">Buy Now</a>
               </div>
-            </article>
-          `;
+            </article>`;
         }).join('');
       } catch (err) {
         console.error(err);
-        grid.innerHTML = '<p class="empty">Could not load products.</p>';
+        grid.innerHTML = '<p class="empty">Could not load products. Please refresh.</p>';
       }
     }
     loadProducts();
