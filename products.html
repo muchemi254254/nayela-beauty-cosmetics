@@ -23,16 +23,27 @@
           <a href="products.html?filter=brands" data-filter="brands">brands</a>
           <a href="products.html?filter=her" data-filter="her">for her</a>
           <a href="products.html?filter=him" data-filter="him">for him</a>
+          <a href="products.html?filter=perfumes" data-filter="perfumes">perfumes</a>
           <a href="products.html?filter=offers" data-filter="offers">special offers</a>
           <a href="about.html">about us</a>
         </nav>
         <div class="nav-icons">
-          <a href="products.html" class="icon-btn cart-btn">
+          <a href="products.html" class="icon-btn cart-btn" aria-label="Cart">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             <span class="cart-count">0</span>
           </a>
+          <button class="mobile-menu-btn" id="menu-btn" aria-label="Menu">☰</button>
         </div>
       </div>
+      <nav class="mobile-nav" id="mobile-nav">
+        <a href="products.html">catalog</a>
+        <a href="products.html?filter=brands">brands</a>
+        <a href="products.html?filter=her">for her</a>
+        <a href="products.html?filter=him">for him</a>
+        <a href="products.html?filter=perfumes">perfumes</a>
+        <a href="products.html?filter=offers">special offers</a>
+        <a href="about.html">about us</a>
+      </nav>
     </header>
 
     <main class="catalog-section">
@@ -46,6 +57,7 @@
         <a href="products.html?filter=brands" class="filter-pill" data-filter="brands">Brands</a>
         <a href="products.html?filter=her" class="filter-pill" data-filter="her">For Her</a>
         <a href="products.html?filter=him" class="filter-pill" data-filter="him">For Him</a>
+        <a href="products.html?filter=perfumes" class="filter-pill" data-filter="perfumes">Perfumes</a>
         <a href="products.html?filter=offers" class="filter-pill" data-filter="offers">Special Offers</a>
       </div>
 
@@ -53,9 +65,36 @@
         <div class="loading">Loading products...</div>
       </div>
     </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">nayela <span>beauty</span></div>
+          <p class="footer-desc">Premium authentic cosmetics, skincare & perfumes. Fast delivery across Kenya. Pay with M-Pesa or WhatsApp.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <a href="products.html">Catalog</a>
+          <a href="products.html?filter=her">For Her</a>
+          <a href="products.html?filter=him">For Him</a>
+          <a href="products.html?filter=perfumes">Perfumes</a>
+          <a href="products.html?filter=offers">Special Offers</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="https://wa.me/254711135449" target="_blank">WhatsApp +254 711 135 449</a>
+          <a href="about.html">About Us</a>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2026 Nayela Beauty Cosmetics. All rights reserved.</div>
+    </footer>
   </div>
 
   <script>
+    document.getElementById('menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-nav').classList.toggle('open');
+    });
+
     const SUPABASE_URL = 'https://iutwrfklovnubhqmeaom.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1dHdyZmtsb3ZudWJocW1lYW9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1ODUyOTYsImV4cCI6MjEwNjE2MTI5Nn0.neWHWJTYtp42YWRX_QPb6LZErmYzlZwheYCgz8BeKgM';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -68,6 +107,7 @@
       brands: ['Brands', 'Shop by your favourite brands'],
       her: ['For Her', 'Beauty essentials curated for her'],
       him: ['For Him', 'Grooming & care products for him'],
+      perfumes: ['Perfumes', 'Fragrances for every occasion'],
       offers: ['Special Offers', 'Great deals and discounts']
     };
     document.getElementById('page-title').textContent = (titles[filter] || titles.all)[0];
@@ -95,9 +135,10 @@
         if (filter === 'offers') filtered = data.filter(p => p.discount_percent > 0);
         else if (filter === 'her') filtered = data.filter(p => ['face','lips','body','her','makeup'].includes((p.category||'').toLowerCase()));
         else if (filter === 'him') filtered = data.filter(p => ['him','men','body'].includes((p.category||'').toLowerCase()));
+        else if (filter === 'perfumes') filtered = data.filter(p => ['perfume','perfumes','fragrance','fragrances'].includes((p.category||'').toLowerCase()) || (p.name||'').toLowerCase().includes('perfume') || (p.name||'').toLowerCase().includes('fragrance'));
 
         if (filtered.length === 0) {
-          grid.innerHTML = '<p class="empty">No products in this category yet.</p>';
+          grid.innerHTML = '<p class="empty">No products in this category yet. Check back soon!</p>';
           return;
         }
 
