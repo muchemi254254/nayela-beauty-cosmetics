@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" href="https://iutwrfklovnubhqmeaom.supabase.co/storage/v1/object/public/products/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="https://iutwrfklovnubhqmeaom.supabase.co/storage/v1/object/public/products/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="https://iutwrfklovnubhqmeaom.supabase.co/storage/v1/object/public/products/favicon-32.png">
   <title>Catalog — Nayela Beauty Cosmetics</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -15,7 +16,7 @@
     <header class="navbar">
       <div class="nav-container">
         <a href="index.html" class="logo">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 9H22L16 13.5L18.5 20.5L12 16L5.5 20.5L8 13.5L2 9H9.5L12 2Z" fill="white"/></svg>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 9H22L16 13.5L18.5 20.5L12 16L5.5 20.5L8 13.5L2 9H9.5L12 2Z" fill="#ff6b4a"/></svg>
           <span>nayela beauty</span>
         </a>
         <nav class="nav-links">
@@ -51,7 +52,6 @@
         <h1 id="page-title">Our Products</h1>
         <p id="page-subtitle">Premium cosmetics & body care — pay with M-Pesa or WhatsApp</p>
       </div>
-
       <div class="filter-bar">
         <a href="products.html" class="filter-pill" data-filter="all">All</a>
         <a href="products.html?filter=brands" class="filter-pill" data-filter="brands">Brands</a>
@@ -60,7 +60,6 @@
         <a href="products.html?filter=perfumes" class="filter-pill" data-filter="perfumes">Perfumes</a>
         <a href="products.html?filter=offers" class="filter-pill" data-filter="offers">Special Offers</a>
       </div>
-
       <div id="products-grid" class="products-grid">
         <div class="loading">Loading products...</div>
       </div>
@@ -112,7 +111,6 @@
     };
     document.getElementById('page-title').textContent = (titles[filter] || titles.all)[0];
     document.getElementById('page-subtitle').textContent = (titles[filter] || titles.all)[1];
-
     document.querySelectorAll('[data-filter]').forEach(el => {
       if (el.dataset.filter === filter) el.classList.add('active');
     });
@@ -120,6 +118,12 @@
     function formatKES(n) {
       return 'KSh ' + Number(n).toLocaleString('en-KE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
     }
+
+    try {
+      const cart = JSON.parse(localStorage.getItem('nayela_cart') || '[]');
+      const badge = document.querySelector('.cart-count');
+      if (badge) badge.textContent = cart.length;
+    } catch(e) {}
 
     async function loadProducts() {
       const grid = document.getElementById('products-grid');
@@ -130,7 +134,6 @@
           grid.innerHTML = '<p class="empty">No products found yet.</p>';
           return;
         }
-
         let filtered = data;
         if (filter === 'offers') filtered = data.filter(p => p.discount_percent > 0);
         else if (filter === 'her') filtered = data.filter(p => ['face','lips','body','her','makeup'].includes((p.category||'').toLowerCase()));
@@ -146,8 +149,7 @@
           const hasDiscount = p.discount_percent > 0;
           const stars = '★'.repeat(Math.round(p.rating || 5));
           const checkoutUrl = `checkout.html?id=${encodeURIComponent(p.id)}&name=${encodeURIComponent(p.name)}&price=${p.price}&original=${p.original_price || ''}&image=${encodeURIComponent(p.image_url || '')}&desc=${encodeURIComponent(p.description || 'Premium quality cosmetics carefully selected for you.')}`;
-          return `
-            <article class="product-item">
+          return `<article class="product-item">
               ${hasDiscount ? `<span class="discount-badge">${p.discount_percent}% OFF</span>` : ''}
               <div class="product-image">
                 <img src="${p.image_url || 'https://via.placeholder.com/300'}" alt="${p.name}" loading="lazy" />
@@ -169,6 +171,20 @@
       }
     }
     loadProducts();
+
+    document.addEventListener('click', function(e) {
+      const a = e.target.closest('a.buy-btn');
+      if (!a) return;
+      try {
+        const url = new URL(a.href, location.origin);
+        const item = { id: url.searchParams.get('id'), name: url.searchParams.get('name'), price: url.searchParams.get('price'), image: url.searchParams.get('image') };
+        let cart = JSON.parse(localStorage.getItem('nayela_cart') || '[]');
+        if (!cart.find(c => c.id === item.id)) cart.push(item);
+        localStorage.setItem('nayela_cart', JSON.stringify(cart));
+        const badge = document.querySelector('.cart-count');
+        if (badge) badge.textContent = cart.length;
+      } catch(err) {}
+    });
   </script>
 </body>
 </html>
