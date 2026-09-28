@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Nayela Beauty Cosmetics</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page-wrapper products-page">
+    <header class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="logo">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 9H22L16 13.5L18.5 20.5L12 16L5.5 20.5L8 13.5L2 9H9.5L12 2Z" fill="white"/></svg>
+          <span>nayela beauty</span>
+        </a>
+        <nav class="nav-links">
+          <a href="products.html">catalog</a>
+          <a href="products.html">brands</a>
+          <a href="products.html">for her</a>
+          <a href="products.html">for him</a>
+          <a href="products.html">special offers</a>
+          <a href="index.html">about us</a>
+        </nav>
+        <div class="nav-icons">
+          <a href="products.html" class="icon-btn cart-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span class="cart-count">1</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="catalog-section">
+      <div class="checkout-grid">
+        <div class="checkout-product">
+          <div class="checkout-image">
+            <img id="product-img" src="" alt="Product">
+          </div>
+          <div class="checkout-details">
+            <h1 id="product-name">Loading...</h1>
+            <div class="price-row" style="justify-content:flex-start;margin:12px 0 20px">
+              <span class="price" id="product-price">—</span>
+              <span class="original-price" id="product-original" style="display:none"></span>
+            </div>
+            <p id="product-desc" class="product-desc">Premium quality cosmetics carefully selected for you.</p>
+            
+            <div class="benefits">
+              <h3>Why you'll love it</h3>
+              <ul>
+                <li>✓ High-quality, skin-friendly ingredients</li>
+                <li>✓ Long-lasting results</li>
+                <li>✓ Fast delivery across Kenya</li>
+                <li>✓ Authentic products only</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkout-pay">
+          <h2>Complete your order</h2>
+
+          <div class="pay-box">
+            <div class="pay-header">
+              <span class="pay-icon">📱</span>
+              <div>
+                <strong>Pay with M-Pesa</strong>
+                <p>You will receive a PIN prompt on your phone</p>
+              </div>
+            </div>
+            <form id="stk-form">
+              <label>M-Pesa Phone Number</label>
+              <input type="tel" id="phone" placeholder="07XX XXX XXX" required>
+              <button type="submit" class="cta-button full-width" id="stk-btn">
+                Pay with M-Pesa
+              </button>
+            </form>
+            <div id="stk-status" class="stk-status" style="display:none"></div>
+          </div>
+
+          <div class="or-divider"><span>or</span></div>
+
+          <div class="pay-box whatsapp-box">
+            <div class="pay-header">
+              <span class="pay-icon">💬</span>
+              <div>
+                <strong>Order via WhatsApp</strong>
+                <p>Chat with us directly to place your order</p>
+              </div>
+            </div>
+            <a id="whatsapp-btn" href="#" target="_blank" class="cta-button full-width whatsapp-btn">
+              Continue on WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const product = {
+      id: params.get('id') || '',
+      name: params.get('name') || 'Nayela Beauty Product',
+      price: params.get('price') || '0',
+      original: params.get('original') || '',
+      image: params.get('image') || '',
+      desc: params.get('desc') || 'Premium quality cosmetics carefully selected for radiant, healthy skin.'
+    };
+
+    document.getElementById('product-name').textContent = product.name;
+    document.getElementById('product-price').textContent = 'KES ' + Number(product.price).toFixed(2);
+    document.getElementById('product-desc').textContent = product.desc;
+    if (product.image) document.getElementById('product-img').src = product.image;
+    if (product.original && Number(product.original) > Number(product.price)) {
+      const el = document.getElementById('product-original');
+      el.textContent = 'KES ' + Number(product.original).toFixed(2);
+      el.style.display = 'inline';
+    }
+
+    const waNumber = '254711135449';
+    const waMsg = encodeURIComponent(
+      `Hi Nayela Beauty 👋\n\nI would like to order:\n*${product.name}*\nPrice: KES ${Number(product.price).toFixed(2)}\n\nPlease confirm availability and delivery details. Thank you!`
+    );
+    document.getElementById('whatsapp-btn').href = `https://wa.me/${waNumber}?text=${waMsg}`;
+
+    document.getElementById('stk-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const phone = document.getElementById('phone').value.trim();
+      const btn = document.getElementById('stk-btn');
+      const status = document.getElementById('stk-status');
+
+      if (!phone) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Sending prompt...';
+      status.style.display = 'block';
+      status.className = 'stk-status pending';
+      status.textContent = 'Please check your phone and enter your M-Pesa PIN...';
+
+      try {
+        const res = await fetch('/api/stk', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: Number(product.price),
+            phone,
+            productName: product.name,
+            productId: product.id
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          status.className = 'stk-status success';
+          status.innerHTML = '✅ Payment prompt sent!<br>Enter your M-Pesa PIN on your phone to complete the order.';
+          btn.textContent = 'Prompt Sent';
+        } else {
+          status.className = 'stk-status error';
+          status.textContent = data.error?.message || 'Could not send payment prompt. Please try WhatsApp instead.';
+          btn.disabled = false;
+          btn.textContent = 'Pay with M-Pesa';
+        }
+      } catch (err) {
+        status.className = 'stk-status error';
+        status.textContent = 'Network error. Please use WhatsApp to order.';
+        btn.disabled = false;
+        btn.textContent = 'Pay with M-Pesa';
+      }
+    });
+  </script>
+</body>
+</html>
