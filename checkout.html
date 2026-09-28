@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" href="https://iutwrfklovnubhqmeaom.supabase.co/storage/v1/object/public/products/favicon-32.png" type="image/png">
   <title>Checkout — Nayela Beauty Cosmetics</title>
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,128 +13,73 @@
   <header class="checkout-topbar">
     <div class="topbar-inner">
       <a href="products.html" class="back-link">← Back to Catalog</a>
-      <div class="topbar-right">
-        <a href="index.html" class="logo-small">nayela beauty</a>
-      </div>
+      <a href="index.html" class="logo-small">nayela beauty</a>
     </div>
   </header>
-
   <main class="checkout-main">
     <div class="checkout-layout">
       <div class="order-summary">
         <div class="summary-card">
-          <div class="summary-image">
-            <img id="product-img" src="" alt="Product">
-          </div>
+          <div class="summary-image"><img id="product-img" src="" alt="Product"></div>
           <div class="summary-info">
             <h2 id="product-name">Loading...</h2>
             <p id="product-meta" class="summary-meta"></p>
           </div>
         </div>
-
         <div class="price-breakdown">
-          <div class="big-price">
-            <span id="product-price">KES 0</span>
-          </div>
-          <div class="breakdown-row">
-            <span>Price</span>
-            <span id="line-price">KES 0</span>
-          </div>
-          <div class="breakdown-row">
-            <span>Delivery</span>
-            <span>KES 0</span>
-          </div>
-          <div class="breakdown-row total-row">
-            <span>Total</span>
-            <span id="total-price">KES 0</span>
-          </div>
+          <div class="big-price"><span id="product-price">KSh 0</span></div>
+          <div class="breakdown-row"><span>Price</span><span id="line-price">KSh 0</span></div>
+          <div class="breakdown-row"><span>Delivery</span><span>KSh 0</span></div>
+          <div class="breakdown-row total-row"><span>Total</span><span id="total-price">KSh 0</span></div>
         </div>
-
-        <div class="reviews-section" id="reviews-section">
+        <div class="reviews-section">
           <h3>Customer Reviews</h3>
-          <div id="reviews-list" class="reviews-list">
-            <p class="muted">Loading reviews...</p>
-          </div>
+          <div id="reviews-list" class="reviews-list"><p class="muted">Loading...</p></div>
           <form id="review-form" class="review-form">
             <h4>Leave a review</h4>
             <input type="text" id="review-name" placeholder="Your name" required>
-            <div class="star-select">
-              <label>Rating:</label>
-              <select id="review-rating">
-                <option value="5">★★★★★</option>
-                <option value="4">★★★★</option>
-                <option value="3">★★★</option>
-                <option value="2">★★</option>
-                <option value="1">★</option>
-              </select>
+            <div class="star-select"><label>Rating:</label>
+              <select id="review-rating"><option value="5">★★★★★</option><option value="4">★★★★</option><option value="3">★★★</option><option value="2">★★</option><option value="1">★</option></select>
             </div>
-            <textarea id="review-comment" placeholder="Your experience with this product..." rows="3"></textarea>
+            <textarea id="review-comment" placeholder="Your experience..." rows="3"></textarea>
             <button type="submit" class="review-submit">Submit Review</button>
           </form>
         </div>
       </div>
-
       <div class="checkout-form-panel">
         <h1>Checkout</h1>
-        <p class="checkout-note">Order confirmation will be sent via WhatsApp & SMS</p>
-
+        <p class="checkout-note">Order confirmation via WhatsApp & SMS</p>
         <h3>Delivery Information</h3>
         <div class="form-row">
-          <div class="form-group">
-            <label>First Name</label>
-            <input type="text" id="first-name" placeholder="John">
-          </div>
-          <div class="form-group">
-            <label>Last Name</label>
-            <input type="text" id="last-name" placeholder="Doe">
-          </div>
+          <div class="form-group"><label>First Name</label><input type="text" id="first-name" placeholder="John"></div>
+          <div class="form-group"><label>Last Name</label><input type="text" id="last-name" placeholder="Doe"></div>
         </div>
         <div class="form-row">
-          <div class="form-group">
-            <label>Phone Number (M-Pesa)</label>
-            <input type="tel" id="phone" placeholder="07XX XXX XXX" required>
-          </div>
-          <div class="form-group">
-            <label>Email (optional)</label>
-            <input type="email" id="email" placeholder="you@email.com">
-          </div>
+          <div class="form-group"><label>Phone Number (M-Pesa)</label><input type="tel" id="phone" placeholder="07XX XXX XXX" required></div>
+          <div class="form-group"><label>Email (optional)</label><input type="email" id="email" placeholder="you@email.com"></div>
         </div>
-
         <h3>Payment Method</h3>
         <div class="payment-methods">
-          <button type="button" class="pay-method active" data-method="mpesa">
-            <span class="method-icon">📱</span> M-Pesa
-          </button>
-          <button type="button" class="pay-method" data-method="whatsapp">
-            <span class="method-icon">💬</span> WhatsApp
-          </button>
+          <button type="button" class="pay-method active" data-method="mpesa">📱 M-Pesa</button>
+          <button type="button" class="pay-method" data-method="whatsapp">💬 WhatsApp</button>
         </div>
-
         <div id="mpesa-section">
           <p class="method-hint">You will receive an M-Pesa PIN prompt on your phone</p>
           <button id="pay-mpesa-btn" class="checkout-btn">Pay with M-Pesa</button>
           <div id="stk-status" class="stk-status" style="display:none"></div>
         </div>
-
         <div id="whatsapp-section" style="display:none">
           <p class="method-hint">Chat with us to complete your order</p>
           <a id="whatsapp-btn" href="#" target="_blank" class="checkout-btn whatsapp-btn">Continue on WhatsApp</a>
         </div>
-
-        <div class="trust-badges">
-          <span>✓ Secure M-Pesa</span>
-          <span>✓ Fast delivery</span>
-          <span>✓ Authentic products</span>
-        </div>
+        <div class="trust-badges"><span>✓ Secure M-Pesa</span><span>✓ Fast delivery</span><span>✓ Authentic products</span></div>
       </div>
     </div>
   </main>
-
   <script>
     const SUPABASE_URL = 'https://iutwrfklovnubhqmeaom.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1dHdyZmtsb3ZudWJocW1lYW9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1ODUyOTYsImV4cCI6MjEwNjE2MTI5Nn0.neWHWJTYtp42YWRX_QPb6LZErmYzlZwheYCgz8BeKgM';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
     const params = new URLSearchParams(window.location.search);
     const product = {
       id: params.get('id') || '',
@@ -144,21 +89,21 @@
       image: params.get('image') || '',
       desc: params.get('desc') || ''
     };
-
+    function fmt(n) { return 'KSh ' + Number(n).toLocaleString('en-KE', {maximumFractionDigits:0}); }
     document.getElementById('product-name').textContent = product.name;
-    document.getElementById('product-price').textContent = 'KES ' + Number(product.price).toFixed(2);
-    document.getElementById('line-price').textContent = 'KES ' + Number(product.price).toFixed(2);
-    document.getElementById('total-price').textContent = 'KES ' + Number(product.price).toFixed(2);
+    document.getElementById('product-price').textContent = fmt(product.price);
+    document.getElementById('line-price').textContent = fmt(product.price);
+    document.getElementById('total-price').textContent = fmt(product.price);
     if (product.image) document.getElementById('product-img').src = product.image;
-    document.getElementById('product-meta').textContent = product.desc ? product.desc.slice(0, 80) + (product.desc.length > 80 ? '...' : '') : 'Premium quality cosmetics';
+    document.getElementById('product-meta').textContent = product.desc ? product.desc.slice(0, 90) : 'Premium quality cosmetics';
 
     document.querySelectorAll('.pay-method').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.pay-method').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const method = btn.dataset.method;
-        document.getElementById('mpesa-section').style.display = method === 'mpesa' ? 'block' : 'none';
-        document.getElementById('whatsapp-section').style.display = method === 'whatsapp' ? 'block' : 'none';
+        const m = btn.dataset.method;
+        document.getElementById('mpesa-section').style.display = m === 'mpesa' ? 'block' : 'none';
+        document.getElementById('whatsapp-section').style.display = m === 'whatsapp' ? 'block' : 'none';
       });
     });
 
@@ -167,14 +112,19 @@
       const first = document.getElementById('first-name').value || '';
       const last = document.getElementById('last-name').value || '';
       const phone = document.getElementById('phone').value || '';
-      const msg = encodeURIComponent(
-        `Hi Nayela Beauty 👋\n\nI would like to order:\n*${product.name}*\nPrice: KES ${Number(product.price).toFixed(2)}\n\nName: ${first} ${last}\nPhone: ${phone}\n\nPlease confirm availability and delivery. Thank you!`
-      );
-      document.getElementById('whatsapp-btn').href = `https://wa.me/${waNumber}?text=${msg}`;
+      const msg = encodeURIComponent('Hi Nayela Beauty 👋\n\nI would like to order:\n*' + product.name + '*\nPrice: ' + fmt(product.price) + '\n\nName: ' + first + ' ' + last + '\nPhone: ' + phone + '\n\nPlease confirm availability and delivery. Thank you!');
+      document.getElementById('whatsapp-btn').href = 'https://wa.me/' + waNumber + '?text=' + msg;
     }
-    document.getElementById('first-name').addEventListener('input', updateWhatsApp);
-    document.getElementById('last-name').addEventListener('input', updateWhatsApp);
-    document.getElementById('phone').addEventListener('input', updateWhatsApp);
+    ['first-name','last-name','phone'].forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('input', updateWhatsApp);
+      const saved = localStorage.getItem('nayela_' + id);
+      if (saved) el.value = saved;
+      el.addEventListener('change', () => localStorage.setItem('nayela_' + id, el.value));
+    });
+    const emailEl = document.getElementById('email');
+    if (localStorage.getItem('nayela_email')) emailEl.value = localStorage.getItem('nayela_email');
+    emailEl.addEventListener('change', () => localStorage.setItem('nayela_email', emailEl.value));
     updateWhatsApp();
 
     document.getElementById('pay-mpesa-btn').addEventListener('click', async () => {
@@ -188,28 +138,36 @@
       status.className = 'stk-status pending';
       status.textContent = 'Please check your phone and enter your M-Pesa PIN...';
 
+      const payload = { amount: Number(product.price), phone, productName: product.name, productId: product.id };
       try {
-        const res = await fetch('/api/stk', {
+        let res = await fetch('/api/stk.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ amount: Number(product.price), phone, productName: product.name, productId: product.id })
+          body: JSON.stringify(payload)
         });
-        const data = await res.json();
+        if (res.status === 404) {
+          res = await fetch('/api/stk', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        }
+        const data = await res.json().catch(() => ({}));
         if (data.success) {
           const txId = data.data?.transactionId || data.data?.id || 'pending';
-          const receiptMsg = encodeURIComponent(`✅ *Nayela Beauty Payment Receipt*\n\nProduct: *${product.name}*\nAmount: KES ${Number(product.price).toFixed(2)}\nPhone: ${phone}\nRef: ${txId}\n\nThank you for shopping with Nayela Beauty! 💄`);
+          const receiptMsg = encodeURIComponent('✅ *Nayela Beauty Payment Receipt*\n\nProduct: *' + product.name + '*\nAmount: ' + fmt(product.price) + '\nPhone: ' + phone + '\nRef: ' + txId + '\n\nThank you for shopping with Nayela Beauty! 💄');
           status.className = 'stk-status success';
-          status.innerHTML = '✅ Payment prompt sent! Enter your M-Pesa PIN.<br><br><a href="https://wa.me/254711135449?text=' + receiptMsg + '" target="_blank" style="color:#0d6b3a;font-weight:600">Send receipt to WhatsApp →</a>';
+          status.innerHTML = '✅ Payment prompt sent! Enter your M-Pesa PIN on your phone.<br><br><a href="https://wa.me/254711135449?text=' + receiptMsg + '" target="_blank" style="color:#0d6b3a;font-weight:600">Send receipt to WhatsApp →</a>';
           btn.textContent = 'Prompt Sent';
         } else {
           status.className = 'stk-status error';
-          status.textContent = data.error?.message || 'Could not send prompt. Try WhatsApp instead.';
+          status.textContent = (data.error && data.error.message) || 'Could not send prompt. Please use WhatsApp.';
           btn.disabled = false;
           btn.textContent = 'Pay with M-Pesa';
         }
       } catch (err) {
         status.className = 'stk-status error';
-        status.textContent = 'Network error. Please use WhatsApp to order.';
+        status.textContent = 'Could not reach payment server. Please try WhatsApp or refresh the page.';
         btn.disabled = false;
         btn.textContent = 'Pay with M-Pesa';
       }
@@ -221,12 +179,11 @@
       try {
         const { data, error } = await supabaseClient.from('reviews').select('*').eq('product_id', product.id).order('created_at', { ascending: false });
         if (error) throw error;
-        if (!data || data.length === 0) { list.innerHTML = '<p class="muted">No reviews yet. Be the first!</p>'; return; }
-        list.innerHTML = data.map(r => `<div class="review-item"><div class="review-header"><strong>${r.name}</strong><span class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span></div><p>${r.comment || ''}</p><small>${new Date(r.created_at).toLocaleDateString()}</small></div>`).join('');
-      } catch (e) { list.innerHTML = '<p class="muted">Could not load reviews.</p>'; }
+        if (!data || !data.length) { list.innerHTML = '<p class="muted">No reviews yet. Be the first!</p>'; return; }
+        list.innerHTML = data.map(r => '<div class="review-item"><div class="review-header"><strong>' + r.name + '</strong><span class="review-stars">' + '★'.repeat(r.rating) + '</span></div><p>' + (r.comment||'') + '</p></div>').join('');
+      } catch(e) { list.innerHTML = '<p class="muted">Could not load reviews.</p>'; }
     }
     loadReviews();
-
     document.getElementById('review-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('review-name').value.trim();
@@ -234,13 +191,12 @@
       const comment = document.getElementById('review-comment').value.trim();
       if (!name || !product.id) return;
       try {
-        const { error } = await supabaseClient.from('reviews').insert({ product_id: product.id, name, rating, comment });
-        if (error) throw error;
+        await supabaseClient.from('reviews').insert({ product_id: product.id, name, rating, comment });
         document.getElementById('review-name').value = '';
         document.getElementById('review-comment').value = '';
         loadReviews();
         alert('Thank you for your review!');
-      } catch (err) { alert('Could not submit review. Please try again.'); }
+      } catch(err) { alert('Could not submit review.'); }
     });
   </script>
 </body>
