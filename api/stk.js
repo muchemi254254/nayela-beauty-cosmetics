@@ -12,45 +12,56 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { amount, phone, productName, productId } = req.body || {};
+    let body = req.body;
+    if (typeof body === 'string') {
+      try { body = JSON.parse(body); } catch (_) { body = {}; }
+    }
+    body = body || {};
+
+    const { amount, phone, productName, productId } = body;
 
     if (!amount || !phone) {
       return res.status(400).json({
         success: false,
-        error: { message: 'amount and phone are required' }
+        error: { message: 'Amount and phone number are required' }
       });
     }
 
     const apiKey = process.env.PALPLUSS_API_KEY;
-    const channelId = process.env.PALPLUSS_KEY_ID;
     const basicAuth = process.env.PALPLUSS_BASIC_AUTH;
 
-    if (!apiKey) {
+    if (!apiKey && !basicAuth) {
       return res.status(500).json({
         success: false,
-        error: { message: 'Payment gateway not configured' }
+        error: { message: 'Payment gateway not configured on server' }
       });
     }
 
     let cleanPhone = String(phone).replace(/\D/g, '');
     if (cleanPhone.startsWith('0')) cleanPhone = '254' + cleanPhone.slice(1);
-    if (cleanPhone.startsWith('+')) cleanPhone = cleanPhone.slice(1);
+    if (cleanPhone.startsWith('2540')) cleanPhone = '254' + cleanPhone.slice(4);
     if (!cleanPhone.startsWith('254')) cleanPhone = '254' + cleanPhone;
 
-    const accountReference = (productId || 'NAYELA').toString().slice(0, 12);
-    const transactionDesc = (productName || 'Nayela Beauty').toString().slice(0, 13);
+    if (cleanPhone.length < 12) {
+      return res.status(400).json({
+        success: false,
+        error: { message: 'Invalid phone number. Use format 07XX XXX XXX' }
+      });
+    }
+
+    const accountReference = String(productId || 'NAYELA').replace(/[^a-zA-Z0-9]/g, '').slice(0, 12) || 'NAYELA';
+    const transactionDesc = String(productName || 'Nayela').replace(/[^\w\s]/g, '').slice(0, 13) || 'Nayela';
 
     const payload = {
-      amount: Number(amount),
+      amount: Math.round(Number(amount)),
       phone: cleanPhone,
       accountReference,
       transactionDesc,
-      channelId: channelId || undefined,
       callbackUrl: 'https://nayela-beauty-cosmetics.vercel.app/api/callback'
     };
 
     const authHeader = basicAuth
-      ? `Basic ${basicAuth}`
+      ? (basicAuth.startsWith('Basic ') ? basicAuth : `Basic ${basicAuth}`)
       : `Basic ${Buffer.from(apiKey + ':').toString('base64')}`;
 
     const response = await fetch('https://api.palpluss.com/v1/payments/stk', {
@@ -62,13 +73,18 @@ export default async function handler(req, res) {
       body: JSON.stringify(payload)
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {
+      const msg =
+        data?.error?.message ||
+        data?.error?.details?.message ||
+        data?.message ||
+        'Payment initiation failed';
       return res.status(response.status).json({
         success: false,
-        error: data.error || { message: 'Payment initiation failed' },
-        requestId: data.requestId
+        error: { message: msg, code: data?.error?.code || data?.code },
+        requestId: data?.requestId
       });
     }
 
