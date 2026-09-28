@@ -3,103 +3,138 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Checkout — Nayela Beauty Cosmetics</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body>
-  <div class="page-wrapper products-page">
-    <header class="navbar">
-      <div class="nav-container">
-        <a href="index.html" class="logo">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 9H22L16 13.5L18.5 20.5L12 16L5.5 20.5L8 13.5L2 9H9.5L12 2Z" fill="white"/></svg>
-          <span>nayela beauty</span>
-        </a>
-        <nav class="nav-links">
-          <a href="products.html">catalog</a>
-          <a href="products.html">brands</a>
-          <a href="products.html">for her</a>
-          <a href="products.html">for him</a>
-          <a href="products.html">special offers</a>
-          <a href="index.html">about us</a>
-        </nav>
-        <div class="nav-icons">
-          <a href="products.html" class="icon-btn cart-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-            <span class="cart-count">1</span>
-          </a>
-        </div>
+<body class="checkout-body">
+  <header class="checkout-topbar">
+    <div class="topbar-inner">
+      <a href="products.html" class="back-link">← Back to Catalog</a>
+      <div class="topbar-right">
+        <a href="index.html" class="logo-small">nayela beauty</a>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <main class="catalog-section">
-      <div class="checkout-grid">
-        <div class="checkout-product">
-          <div class="checkout-image">
+  <main class="checkout-main">
+    <div class="checkout-layout">
+      <div class="order-summary">
+        <div class="summary-card">
+          <div class="summary-image">
             <img id="product-img" src="" alt="Product">
           </div>
-          <div class="checkout-details">
-            <h1 id="product-name">Loading...</h1>
-            <div class="price-row" style="justify-content:flex-start;margin:12px 0 20px">
-              <span class="price" id="product-price">—</span>
-              <span class="original-price" id="product-original" style="display:none"></span>
-            </div>
-            <p id="product-desc" class="product-desc">Premium quality cosmetics carefully selected for you.</p>
-            
-            <div class="benefits">
-              <h3>Why you'll love it</h3>
-              <ul>
-                <li>✓ High-quality, skin-friendly ingredients</li>
-                <li>✓ Long-lasting results</li>
-                <li>✓ Fast delivery across Kenya</li>
-                <li>✓ Authentic products only</li>
-              </ul>
-            </div>
+          <div class="summary-info">
+            <h2 id="product-name">Loading...</h2>
+            <p id="product-meta" class="summary-meta"></p>
           </div>
         </div>
 
-        <div class="checkout-pay">
-          <h2>Complete your order</h2>
-
-          <div class="pay-box">
-            <div class="pay-header">
-              <span class="pay-icon">📱</span>
-              <div>
-                <strong>Pay with M-Pesa</strong>
-                <p>You will receive a PIN prompt on your phone</p>
-              </div>
-            </div>
-            <form id="stk-form">
-              <label>M-Pesa Phone Number</label>
-              <input type="tel" id="phone" placeholder="07XX XXX XXX" required>
-              <button type="submit" class="cta-button full-width" id="stk-btn">
-                Pay with M-Pesa
-              </button>
-            </form>
-            <div id="stk-status" class="stk-status" style="display:none"></div>
+        <div class="price-breakdown">
+          <div class="big-price">
+            <span id="product-price">KES 0</span>
           </div>
-
-          <div class="or-divider"><span>or</span></div>
-
-          <div class="pay-box whatsapp-box">
-            <div class="pay-header">
-              <span class="pay-icon">💬</span>
-              <div>
-                <strong>Order via WhatsApp</strong>
-                <p>Chat with us directly to place your order</p>
-              </div>
-            </div>
-            <a id="whatsapp-btn" href="#" target="_blank" class="cta-button full-width whatsapp-btn">
-              Continue on WhatsApp
-            </a>
+          <div class="breakdown-row">
+            <span>Price</span>
+            <span id="line-price">KES 0</span>
           </div>
+          <div class="breakdown-row">
+            <span>Delivery</span>
+            <span>KES 0</span>
+          </div>
+          <div class="breakdown-row total-row">
+            <span>Total</span>
+            <span id="total-price">KES 0</span>
+          </div>
+        </div>
+
+        <div class="reviews-section" id="reviews-section">
+          <h3>Customer Reviews</h3>
+          <div id="reviews-list" class="reviews-list">
+            <p class="muted">Loading reviews...</p>
+          </div>
+          <form id="review-form" class="review-form">
+            <h4>Leave a review</h4>
+            <input type="text" id="review-name" placeholder="Your name" required>
+            <div class="star-select">
+              <label>Rating:</label>
+              <select id="review-rating">
+                <option value="5">★★★★★</option>
+                <option value="4">★★★★</option>
+                <option value="3">★★★</option>
+                <option value="2">★★</option>
+                <option value="1">★</option>
+              </select>
+            </div>
+            <textarea id="review-comment" placeholder="Your experience with this product..." rows="3"></textarea>
+            <button type="submit" class="review-submit">Submit Review</button>
+          </form>
         </div>
       </div>
-    </main>
-  </div>
+
+      <div class="checkout-form-panel">
+        <h1>Checkout</h1>
+        <p class="checkout-note">Order confirmation will be sent via WhatsApp & SMS</p>
+
+        <h3>Delivery Information</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="first-name" placeholder="John">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="last-name" placeholder="Doe">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number (M-Pesa)</label>
+            <input type="tel" id="phone" placeholder="07XX XXX XXX" required>
+          </div>
+          <div class="form-group">
+            <label>Email (optional)</label>
+            <input type="email" id="email" placeholder="you@email.com">
+          </div>
+        </div>
+
+        <h3>Payment Method</h3>
+        <div class="payment-methods">
+          <button type="button" class="pay-method active" data-method="mpesa">
+            <span class="method-icon">📱</span> M-Pesa
+          </button>
+          <button type="button" class="pay-method" data-method="whatsapp">
+            <span class="method-icon">💬</span> WhatsApp
+          </button>
+        </div>
+
+        <div id="mpesa-section">
+          <p class="method-hint">You will receive an M-Pesa PIN prompt on your phone</p>
+          <button id="pay-mpesa-btn" class="checkout-btn">Pay with M-Pesa</button>
+          <div id="stk-status" class="stk-status" style="display:none"></div>
+        </div>
+
+        <div id="whatsapp-section" style="display:none">
+          <p class="method-hint">Chat with us to complete your order</p>
+          <a id="whatsapp-btn" href="#" target="_blank" class="checkout-btn whatsapp-btn">Continue on WhatsApp</a>
+        </div>
+
+        <div class="trust-badges">
+          <span>✓ Secure M-Pesa</span>
+          <span>✓ Fast delivery</span>
+          <span>✓ Authentic products</span>
+        </div>
+      </div>
+    </div>
+  </main>
 
   <script>
+    const SUPABASE_URL = 'https://iutwrfklovnubhqmeaom.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1dHdyZmtsb3ZudWJocW1lYW9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1ODUyOTYsImV4cCI6MjEwNjE2MTI5Nn0.neWHWJTYtp42YWRX_QPb6LZErmYzlZwheYCgz8BeKgM';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const params = new URLSearchParams(window.location.search);
     const product = {
       id: params.get('id') || '',
@@ -107,33 +142,46 @@
       price: params.get('price') || '0',
       original: params.get('original') || '',
       image: params.get('image') || '',
-      desc: params.get('desc') || 'Premium quality cosmetics carefully selected for radiant, healthy skin.'
+      desc: params.get('desc') || ''
     };
 
     document.getElementById('product-name').textContent = product.name;
     document.getElementById('product-price').textContent = 'KES ' + Number(product.price).toFixed(2);
-    document.getElementById('product-desc').textContent = product.desc;
+    document.getElementById('line-price').textContent = 'KES ' + Number(product.price).toFixed(2);
+    document.getElementById('total-price').textContent = 'KES ' + Number(product.price).toFixed(2);
     if (product.image) document.getElementById('product-img').src = product.image;
-    if (product.original && Number(product.original) > Number(product.price)) {
-      const el = document.getElementById('product-original');
-      el.textContent = 'KES ' + Number(product.original).toFixed(2);
-      el.style.display = 'inline';
-    }
+    document.getElementById('product-meta').textContent = product.desc ? product.desc.slice(0, 80) + (product.desc.length > 80 ? '...' : '') : 'Premium quality cosmetics';
+
+    document.querySelectorAll('.pay-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.pay-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const method = btn.dataset.method;
+        document.getElementById('mpesa-section').style.display = method === 'mpesa' ? 'block' : 'none';
+        document.getElementById('whatsapp-section').style.display = method === 'whatsapp' ? 'block' : 'none';
+      });
+    });
 
     const waNumber = '254711135449';
-    const waMsg = encodeURIComponent(
-      `Hi Nayela Beauty 👋\n\nI would like to order:\n*${product.name}*\nPrice: KES ${Number(product.price).toFixed(2)}\n\nPlease confirm availability and delivery details. Thank you!`
-    );
-    document.getElementById('whatsapp-btn').href = `https://wa.me/${waNumber}?text=${waMsg}`;
+    function updateWhatsApp() {
+      const first = document.getElementById('first-name').value || '';
+      const last = document.getElementById('last-name').value || '';
+      const phone = document.getElementById('phone').value || '';
+      const msg = encodeURIComponent(
+        `Hi Nayela Beauty 👋\n\nI would like to order:\n*${product.name}*\nPrice: KES ${Number(product.price).toFixed(2)}\n\nName: ${first} ${last}\nPhone: ${phone}\n\nPlease confirm availability and delivery. Thank you!`
+      );
+      document.getElementById('whatsapp-btn').href = `https://wa.me/${waNumber}?text=${msg}`;
+    }
+    document.getElementById('first-name').addEventListener('input', updateWhatsApp);
+    document.getElementById('last-name').addEventListener('input', updateWhatsApp);
+    document.getElementById('phone').addEventListener('input', updateWhatsApp);
+    updateWhatsApp();
 
-    document.getElementById('stk-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    document.getElementById('pay-mpesa-btn').addEventListener('click', async () => {
       const phone = document.getElementById('phone').value.trim();
-      const btn = document.getElementById('stk-btn');
+      const btn = document.getElementById('pay-mpesa-btn');
       const status = document.getElementById('stk-status');
-
-      if (!phone) return;
-
+      if (!phone) { alert('Please enter your M-Pesa phone number'); return; }
       btn.disabled = true;
       btn.textContent = 'Sending prompt...';
       status.style.display = 'block';
@@ -144,23 +192,18 @@
         const res = await fetch('/api/stk', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            amount: Number(product.price),
-            phone,
-            productName: product.name,
-            productId: product.id
-          })
+          body: JSON.stringify({ amount: Number(product.price), phone, productName: product.name, productId: product.id })
         });
-
         const data = await res.json();
-
         if (data.success) {
+          const txId = data.data?.transactionId || data.data?.id || 'pending';
+          const receiptMsg = encodeURIComponent(`✅ *Nayela Beauty Payment Receipt*\n\nProduct: *${product.name}*\nAmount: KES ${Number(product.price).toFixed(2)}\nPhone: ${phone}\nRef: ${txId}\n\nThank you for shopping with Nayela Beauty! 💄`);
           status.className = 'stk-status success';
-          status.innerHTML = '✅ Payment prompt sent!<br>Enter your M-Pesa PIN on your phone to complete the order.';
+          status.innerHTML = '✅ Payment prompt sent! Enter your M-Pesa PIN.<br><br><a href="https://wa.me/254711135449?text=' + receiptMsg + '" target="_blank" style="color:#0d6b3a;font-weight:600">Send receipt to WhatsApp →</a>';
           btn.textContent = 'Prompt Sent';
         } else {
           status.className = 'stk-status error';
-          status.textContent = data.error?.message || 'Could not send payment prompt. Please try WhatsApp instead.';
+          status.textContent = data.error?.message || 'Could not send prompt. Try WhatsApp instead.';
           btn.disabled = false;
           btn.textContent = 'Pay with M-Pesa';
         }
@@ -170,6 +213,34 @@
         btn.disabled = false;
         btn.textContent = 'Pay with M-Pesa';
       }
+    });
+
+    async function loadReviews() {
+      const list = document.getElementById('reviews-list');
+      if (!product.id) { list.innerHTML = '<p class="muted">No reviews yet.</p>'; return; }
+      try {
+        const { data, error } = await supabaseClient.from('reviews').select('*').eq('product_id', product.id).order('created_at', { ascending: false });
+        if (error) throw error;
+        if (!data || data.length === 0) { list.innerHTML = '<p class="muted">No reviews yet. Be the first!</p>'; return; }
+        list.innerHTML = data.map(r => `<div class="review-item"><div class="review-header"><strong>${r.name}</strong><span class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span></div><p>${r.comment || ''}</p><small>${new Date(r.created_at).toLocaleDateString()}</small></div>`).join('');
+      } catch (e) { list.innerHTML = '<p class="muted">Could not load reviews.</p>'; }
+    }
+    loadReviews();
+
+    document.getElementById('review-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('review-name').value.trim();
+      const rating = Number(document.getElementById('review-rating').value);
+      const comment = document.getElementById('review-comment').value.trim();
+      if (!name || !product.id) return;
+      try {
+        const { error } = await supabaseClient.from('reviews').insert({ product_id: product.id, name, rating, comment });
+        if (error) throw error;
+        document.getElementById('review-name').value = '';
+        document.getElementById('review-comment').value = '';
+        loadReviews();
+        alert('Thank you for your review!');
+      } catch (err) { alert('Could not submit review. Please try again.'); }
     });
   </script>
 </body>
