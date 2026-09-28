@@ -6,7 +6,6 @@
   <title>Catalog — Nayela Beauty Cosmetics</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -15,9 +14,7 @@
     <header class="navbar">
       <div class="nav-container">
         <a href="index.html" class="logo">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2L14.5 9H22L16 13.5L18.5 20.5L12 16L5.5 20.5L8 13.5L2 9H9.5L12 2Z" fill="white"/>
-          </svg>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 9H22L16 13.5L18.5 20.5L12 16L5.5 20.5L8 13.5L2 9H9.5L12 2Z" fill="white"/></svg>
           <span>nayela beauty</span>
         </a>
         <nav class="nav-links">
@@ -29,24 +26,8 @@
           <a href="index.html">about us</a>
         </nav>
         <div class="nav-icons">
-          <button class="icon-btn" aria-label="Search">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
-            </svg>
-          </button>
-          <button class="icon-btn" aria-label="Account">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </button>
-          <a href="products.html" class="icon-btn cart-btn" aria-label="Cart">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
-              <path d="M3 6h18"></path>
-              <path d="M16 10a4 4 0 0 1-8 0"></path>
-            </svg>
+          <a href="products.html" class="icon-btn cart-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             <span class="cart-count">0</span>
           </a>
         </div>
@@ -56,7 +37,7 @@
     <main class="catalog-section">
       <div class="catalog-header">
         <h1>Our Products</h1>
-        <p>Premium cosmetics & body care</p>
+        <p>Premium cosmetics & body care — pay with M-Pesa or WhatsApp</p>
       </div>
       <div id="products-grid" class="products-grid">
         <div class="loading">Loading products...</div>
@@ -67,7 +48,6 @@
   <script>
     const SUPABASE_URL = 'https://iutwrfklovnubhqmeaom.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1dHdyZmtsb3ZudWJocW1lYW9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1ODUyOTYsImV4cCI6MjEwNjE2MTI5Nn0.neWHWJTYtp42YWRX_QPb6LZErmYzlZwheYCgz8BeKgM';
-
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     async function loadProducts() {
@@ -79,7 +59,6 @@
           .order('created_at', { ascending: true });
 
         if (error) throw error;
-
         if (!data || data.length === 0) {
           grid.innerHTML = '<p class="empty">No products found.</p>';
           return;
@@ -88,6 +67,8 @@
         grid.innerHTML = data.map(p => {
           const hasDiscount = p.discount_percent > 0;
           const stars = '★'.repeat(Math.round(p.rating || 5));
+          const checkoutUrl = `checkout.html?id=${encodeURIComponent(p.id)}&name=${encodeURIComponent(p.name)}&price=${p.price}&original=${p.original_price || ''}&image=${encodeURIComponent(p.image_url || '')}&desc=${encodeURIComponent(p.description || 'Premium quality cosmetics carefully selected for you.')}`;
+
           return `
             <article class="product-item">
               ${hasDiscount ? `<span class="discount-badge">${p.discount_percent}% OFF</span>` : ''}
@@ -98,19 +79,19 @@
                 <div class="stars">${stars}</div>
                 <h3 class="product-name">${p.name}</h3>
                 <div class="price-row">
-                  <span class="price">$${Number(p.price).toFixed(2)}</span>
-                  ${hasDiscount && p.original_price ? `<span class="original-price">$${Number(p.original_price).toFixed(2)}</span>` : ''}
+                  <span class="price">KES ${Number(p.price).toFixed(2)}</span>
+                  ${hasDiscount && p.original_price ? `<span class="original-price">KES ${Number(p.original_price).toFixed(2)}</span>` : ''}
                 </div>
+                <a href="${checkoutUrl}" class="buy-btn">Buy Now</a>
               </div>
             </article>
           `;
         }).join('');
       } catch (err) {
         console.error(err);
-        grid.innerHTML = '<p class="empty">Could not load products. Please try again later.</p>';
+        grid.innerHTML = '<p class="empty">Could not load products.</p>';
       }
     }
-
     loadProducts();
   </script>
 </body>
