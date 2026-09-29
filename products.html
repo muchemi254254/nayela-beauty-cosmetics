@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="https://iutwrfklovnubhqmeaom.supabase.co/storage/v1/object/public/products/favicon-32.png" type="image/png" sizes="32x32">
-  <link rel="icon" href="https://iutwrfklovnubhqmeaom.supabase.co/storage/v1/object/public/products/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="https://iutwrfklovnubhqmeaom.supabase.co/storage/v1/object/public/products/favicon-32.png">
+  <link rel="icon" href="https://iutwrfklovnubhqmeaom.supabase.co/storage/v1/object/public/products/favicon-32.png" type="image/png">
   <title>Catalog — Nayela Beauty Cosmetics</title>
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -148,6 +146,7 @@
         grid.innerHTML = filtered.map(p => {
           const hasDiscount = p.discount_percent > 0;
           const stars = '★'.repeat(Math.round(p.rating || 5));
+          const shortDesc = (p.description || '').slice(0, 55) + ((p.description||'').length > 55 ? '…' : '');
           const checkoutUrl = `checkout.html?id=${encodeURIComponent(p.id)}&name=${encodeURIComponent(p.name)}&price=${p.price}&original=${p.original_price || ''}&image=${encodeURIComponent(p.image_url || '')}&desc=${encodeURIComponent(p.description || 'Premium quality cosmetics carefully selected for you.')}`;
           return `<article class="product-item">
               ${hasDiscount ? `<span class="discount-badge">${p.discount_percent}% OFF</span>` : ''}
@@ -157,11 +156,12 @@
               <div class="product-info">
                 <div class="stars">${stars}</div>
                 <h3 class="product-name">${p.name}</h3>
+                <p class="product-short">${shortDesc}</p>
                 <div class="price-row">
                   <span class="price">${formatKES(p.price)}</span>
                   ${hasDiscount && p.original_price ? `<span class="original-price">${formatKES(p.original_price)}</span>` : ''}
                 </div>
-                <a href="${checkoutUrl}" class="buy-btn">Buy Now</a>
+                <a href="${checkoutUrl}" class="buy-btn">See details</a>
               </div>
             </article>`;
         }).join('');
