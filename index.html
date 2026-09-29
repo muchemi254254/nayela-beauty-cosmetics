@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://iutwrfklovnubhqmeaom.supabase.co/storage/v1/object/public/products/favicon-32.png" type="image/png">
   <title>Nayela Beauty Cosmetics</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -14,32 +14,20 @@
     <header class="navbar">
       <div class="nav-container">
         <a href="index.html" class="logo">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2L14.5 9H22L16 13.5L18.5 20.5L12 16L5.5 20.5L8 13.5L2 9H9.5L12 2Z" fill="white"/>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L14.5 9H22L16 13.5L18.5 20.5L12 16L5.5 20.5L8 13.5L2 9H9.5L12 2Z" fill="#ff6b4a"/>
           </svg>
           <span>nayela beauty</span>
         </a>
         <nav class="nav-links">
           <a href="products.html">catalog</a>
-          <a href="products.html">brands</a>
-          <a href="products.html">for her</a>
-          <a href="products.html">for him</a>
-          <a href="products.html">special offers</a>
-          <a href="#about">about us</a>
+          <a href="products.html?filter=brands">brands</a>
+          <a href="products.html?filter=her">for her</a>
+          <a href="products.html?filter=him">for him</a>
+          <a href="products.html?filter=offers">special offers</a>
+          <a href="about.html">about us</a>
         </nav>
         <div class="nav-icons">
-          <button class="icon-btn" aria-label="Search">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
-            </svg>
-          </button>
-          <button class="icon-btn" aria-label="Account">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </button>
           <a href="products.html" class="icon-btn cart-btn" aria-label="Cart">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
@@ -55,12 +43,12 @@
     <main class="hero">
       <div class="hero-container">
         <div class="hero-image">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80" alt="Woman with freckles" />
+          <img src="https://iutwrfklovnubhqmeaom.supabase.co/storage/v1/object/public/products/hero-woman.webp" alt="Nayela Beauty — Kenya" />
         </div>
         <div class="hero-content">
           <div class="promo-card">
-            <h1>spring discounts<br>up to <span class="discount">-50%</span></h1>
-            <p>We strive to provide our customers with exceptionally high-quality body care products.</p>
+            <h1>best Kenyan beauty<br>spring discounts<br>up to <span class="discount">-50%</span></h1>
+            <p>We strive to provide our customers with exceptionally high-quality body care products. Authentic beauty, skincare &amp; personal care — delivered across Kenya.</p>
             <a href="products.html" class="cta-button">
               Move to the promotion
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -69,13 +57,13 @@
             </a>
           </div>
           <div class="product-cards">
-            <a href="products.html" class="product-card">
+            <a href="products.html?filter=her" class="product-card">
               <div class="card-label">for lips</div>
               <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80" alt="Lip products" />
             </a>
-            <a href="products.html" class="product-card">
+            <a href="products.html?filter=her" class="product-card">
               <div class="card-label">for body</div>
-              <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&q=80" alt="Body cream jar" />
+              <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&q=80" alt="Body cream" />
             </a>
           </div>
         </div>
